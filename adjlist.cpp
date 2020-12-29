@@ -212,24 +212,6 @@ void adjList::getRequire(Requirement *rqmt)
 
     cout<<endl<<"Required departure time>>"<<endl;
     getchar();
-    /*getline(cin, rqmt->dptT1);
-    if (rqmt->dptT1 != "No" && rqmt->dptT1 != "NO" && rqmt->dptT1 != "no")
-        getline(cin, rqmt->dptT2);
-    else
-    {
-        rqmt->dptT1 = EarlistT;
-        rqmt->dptT2 = LatestT;
-    }
-
-    cout<<endl<<"Required arrival time>>"<<endl;
-    getline(cin, rqmt->arvlT1);
-    if (rqmt->arvlT1 != "No" && rqmt->arvlT1 != "NO" && rqmt->arvlT1 != "no")
-        getline(cin, rqmt->arvlT2);
-    else
-    {
-        rqmt->arvlT1 = EarlistT;
-        rqmt->arvlT2 = LatestT;
-    }*/
     getline(cin, rqmt->dptT1);
     if (rqmt->dptT1 != "No" && rqmt->dptT1 != "NO" && rqmt->dptT1 != "no")
         getline(cin, rqmt->dptT2);
@@ -265,29 +247,36 @@ bool adjList::dealRequire(adjListNode *p, Requirement &rqmt, string nowTime, int
                                         int nowFlyT, int nowWaitT, int start, int end)
 {
     if (deltaTime(nowTime, p->dptT) > 0) return false;
-    /*if (nowApt == start)
-    {
-        if (deltaTime(p->dptT, rqmt.dptT1) < 0) return false;
-        if (deltaTime(p->dptT, rqmt.dptT2) > 0) return false;
-    }
-    if (p->arvlApt == end)
-    {
-        if (deltaTime(p->arvlT, rqmt.arvlT1) < 0) return false;
-        if (deltaTime(p->arvlT, rqmt.arvlT2) > 0) return false;
-    }*/
+
     if (nowApt == start && rqmt.dptT1 != "No" && rqmt.dptT1 != "NO" && rqmt.dptT1 != "no")
     {
-        string rt1 = p->dptT.substr(0, 9) + rqmt.dptT1;
-        if (deltaTime(p->dptT, rt1) < 0) return false;
-        string rt2 = p->dptT.substr(0, 9) + rqmt.dptT2;
-        if (deltaTime(p->dptT, rt2) > 0) return false;
+        if (rqmt.dptT1.find('/') == rqmt.dptT1.npos)
+        {
+            string rt1 = p->dptT.substr(0, 9) + rqmt.dptT1;
+            if (deltaTime(p->dptT, rt1) < 0) return false;
+            string rt2 = p->dptT.substr(0, 9) + rqmt.dptT2;
+            if (deltaTime(p->dptT, rt2) > 0) return false;
+        }
+        else
+        {
+            if (deltaTime(p->dptT, rqmt.dptT1) < 0) return false;
+            if (deltaTime(p->dptT, rqmt.dptT2) > 0) return false;
+        }
     }
     if (p->arvlApt == end && rqmt.arvlT1 != "No" && rqmt.arvlT1 != "NO" && rqmt.arvlT1 != "no")
     {
-        string rt1 = p->arvlT.substr(0, 9) + rqmt.arvlT1;
-        if (deltaTime(p->arvlT, rt1) < 0) return false;
-        string rt2 = p->arvlT.substr(0, 9) + rqmt.arvlT2;
-        if (deltaTime(p->arvlT, rt2) > 0) return false;
+        if (rqmt.arvlT1.find('/') == rqmt.arvlT1.npos)
+        {
+            string rt1 = p->arvlT.substr(0, 9) + rqmt.arvlT1;
+            if (deltaTime(p->arvlT, rt1) < 0) return false;
+            string rt2 = p->arvlT.substr(0, 9) + rqmt.arvlT2;
+            if (deltaTime(p->arvlT, rt2) > 0) return false;
+        }
+        else
+        {
+            if (deltaTime(p->arvlT, rqmt.arvlT1) < 0) return false;
+            if (deltaTime(p->arvlT, rqmt.arvlT2) > 0) return false;
+        }
     }
 
     if (nowFlyT + deltaTime(p->arvlT, p->dptT) > rqmt.flyT) return false;

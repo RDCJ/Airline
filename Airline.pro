@@ -9,10 +9,6 @@ SOURCES += \
         def.cpp \
         main.cpp
 
-DISTFILES +=
-
-RESOURCES +=
-
 HEADERS += \
     Node.h \
     adjlist.h \
